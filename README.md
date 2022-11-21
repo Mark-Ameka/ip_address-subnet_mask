@@ -1,1 +1,2 @@
-# ip_address-subnet_mask
+# IP Address Subnet Mask
+implemented in c programming
