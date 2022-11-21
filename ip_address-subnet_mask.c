@@ -98,6 +98,7 @@ int main(){
 	printf("%d.", subnet.n2);
 	printf("%d.", subnet.n3);
 	printf("%d", subnet.n4);
+	printf("/%d", prefix);
 	printf("\n");
 	
 	//network
@@ -114,7 +115,7 @@ int main(){
 	printf("\n\n");
 	
 	printf("%-7s  %-10s|%-7s|%-5s| %-15s|%-8s\n", " ", "NOH", "PREFIX", "DELTA", "IP", "SUBNET");
-	for(i = 0; i<size; i++){
+	for(i = 0; i < size; i++){
 		printf("%-7d: ", noh[i]);
 		//find first occurence
 		for(j = 0; j < bytes && (oc[j].num_of_host - noh[i]) < 0;  j++){}
