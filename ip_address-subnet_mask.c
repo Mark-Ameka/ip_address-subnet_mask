@@ -30,11 +30,11 @@ typedef struct{
 
 int main(){
 	//ip address
-	Address ip_add = {144, 59, 202, 33};
+	Address ip_add = {85, 63, 45, 190};;
 	//prefix
-	int prefix = 11;
+	int prefix = 19;
 	//hosts
-	int noh[] = {296000, 7500, 6200, 4800, 212, 74, 27,12};
+	int noh[] = {4074, 2000, 840, 507, 197, 118, 111, 54, 2};
 	
 	int i, j, res;
 	
@@ -86,16 +86,16 @@ int main(){
 		subnet = oc[i].sub_mask;
 	}
 	
-	printf("IP ADD: ");
-	printf("%11d.", ip_add.o1);
+	printf("%-15s", "IP ADD: ");
+	printf("%d.", ip_add.o1);
 	printf("%d.", ip_add.o2);
 	printf("%d.", ip_add.o3);
 	printf("%d", ip_add.o4);
 	printf("/%d", prefix);
 	printf("\n");
 	
-	printf("SUBNET MASK: ");
-	printf("%6d.", subnet.n1);
+	printf("%-15s", "SUBNET MASK: ");
+	printf("%d.", subnet.n1);
 	printf("%d.", subnet.n2);
 	printf("%d.", subnet.n3);
 	printf("%d", subnet.n4);
@@ -107,15 +107,15 @@ int main(){
 	new_ip.o3 = ip_add.o3 & subnet.n3;
 	new_ip.o4 = ip_add.o4 & subnet.n4;
 	
-	printf("NETWORK: ");
-	printf("%10d.", new_ip.o1);
+	printf("%-15s", "NETWORK: ");
+	printf("%d.", new_ip.o1);
 	printf("%d.", new_ip.o2);
 	printf("%d.", new_ip.o3);
 	printf("%d", new_ip.o4);
 	printf("\n\n");
 	
 	printf("%-7s  %-10s|%-7s|%-5s| %-15s|%-8s\n", " ", "NOH", "PREFIX", "DELTA", "IP", "SUBNET");
-	for(i = 0; i<size; i++){
+	for(i = 0; i < size; i++){
 		printf("%-7d: ", noh[i]);
 		//find first occurence
 		for(j = 0; j < bytes && (oc[j].num_of_host - noh[i]) < 0;  j++){}
@@ -124,14 +124,29 @@ int main(){
 			printf("%-3d.%-3d.%-3d.%-3d|", new_ip.o1, new_ip.o2, new_ip.o3, new_ip.o4);
 
 
-			if(oc[j].sub_mask.n2==0){
+			if(oc[j].sub_mask.n2 == 0){
 				new_ip.o1 += oc[j].delta;
-			}else if(oc[j].sub_mask.n3==0){
-				new_ip.o2 += oc[j].delta;
-			}else if(oc[j].sub_mask.n4==0){
-				new_ip.o3 += oc[j].delta;
+			}else if(oc[j].sub_mask.n3 == 0){
+				if(new_ip.o2 + oc[j].delta > 255){
+					new_ip.o1 += 1;
+					new_ip.o2 = 0;
+				} else{
+					new_ip.o2 += oc[j].delta;
+				}
+			}else if(oc[j].sub_mask.n4 == 0){
+				if(new_ip.o3 + oc[j].delta > 255){
+					new_ip.o2 += 1;
+					new_ip.o3 = 0;
+				} else{
+					new_ip.o3 += oc[j].delta;
+				}
 			}else{
-				new_ip.o4 += oc[j].delta;
+				if(new_ip.o4 + oc[j].delta > 255){
+					new_ip.o3 += 1;
+					new_ip.o4 = 0;
+				} else{
+					new_ip.o4 += oc[j].delta;
+				}
 			}
 			
 			printf("%-3d.%-3d.%-3d.%-3d\n", oc[j].sub_mask.n1, oc[j].sub_mask.n2, oc[j].sub_mask.n3, oc[j].sub_mask.n4);
