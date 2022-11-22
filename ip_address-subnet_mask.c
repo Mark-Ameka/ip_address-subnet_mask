@@ -30,11 +30,11 @@ typedef struct{
 
 int main(){
 	//ip address
-	Address ip_add = {65, 32, 44, 15};
+	Address ip_add = {144, 59, 202, 33};
 	//prefix
-	int prefix = 17;
+	int prefix = 11;
 	//hosts
-	int noh[] = {18004, 6005, 777, 202, 133, 45, 12, 2, 2, 2, 2, 2};
+	int noh[] = {296000, 7500, 6200, 4800, 212, 74, 27,12};
 	
 	int i, j, res;
 	
@@ -91,6 +91,7 @@ int main(){
 	printf("%d.", ip_add.o2);
 	printf("%d.", ip_add.o3);
 	printf("%d", ip_add.o4);
+	printf("/%d", prefix);
 	printf("\n");
 	
 	printf("SUBNET MASK: ");
@@ -98,7 +99,6 @@ int main(){
 	printf("%d.", subnet.n2);
 	printf("%d.", subnet.n3);
 	printf("%d", subnet.n4);
-	printf("/%d", prefix);
 	printf("\n");
 	
 	//network
@@ -115,7 +115,7 @@ int main(){
 	printf("\n\n");
 	
 	printf("%-7s  %-10s|%-7s|%-5s| %-15s|%-8s\n", " ", "NOH", "PREFIX", "DELTA", "IP", "SUBNET");
-	for(i = 0; i < size; i++){
+	for(i = 0; i<size; i++){
 		printf("%-7d: ", noh[i]);
 		//find first occurence
 		for(j = 0; j < bytes && (oc[j].num_of_host - noh[i]) < 0;  j++){}
@@ -123,14 +123,15 @@ int main(){
 			printf("%-10d|%-7d|%-5d| ", oc[j].num_of_host, oc[j].prefix, oc[j].delta);
 			printf("%-3d.%-3d.%-3d.%-3d|", new_ip.o1, new_ip.o2, new_ip.o3, new_ip.o4);
 
-			if(oc[j].sub_mask.n4 == 0){
-				new_ip.o3 += oc[j].delta;
-			} else if(oc[j].sub_mask.n4 != 0){
-				new_ip.o4 += oc[j].delta;
-			} else if(oc[j].sub_mask.n2 != 0){
-				new_ip.o2 += oc[j].delta;
-			} else if(oc[j].sub_mask.n2 == 0){
+
+			if(oc[j].sub_mask.n2==0){
 				new_ip.o1 += oc[j].delta;
+			}else if(oc[j].sub_mask.n3==0){
+				new_ip.o2 += oc[j].delta;
+			}else if(oc[j].sub_mask.n4==0){
+				new_ip.o3 += oc[j].delta;
+			}else{
+				new_ip.o4 += oc[j].delta;
 			}
 			
 			printf("%-3d.%-3d.%-3d.%-3d\n", oc[j].sub_mask.n1, oc[j].sub_mask.n2, oc[j].sub_mask.n3, oc[j].sub_mask.n4);
