@@ -5,6 +5,11 @@
 //	int prefix = 19;
 //	int noh[] = {4074, 2000, 840, 507, 197, 118, 111, 54, 2};
 
+//Classes default prefix
+//	1-127	=	/8
+//	128-191	=	/16
+//	192-223	=	/24
+
 int cmpfunc(const void *a, const void *b){
    return ( *(int*)b - *(int*)a );
 }
@@ -170,7 +175,6 @@ int main(){
 				br_add.o3 = 255;
 				br_add.o4 = 255;
 			} else if(br == 3){
-				br_add.o2 -= 1;
 				br_add.o3 -= 1;
 				br_add.o4 = 255;
 			} else if(br == 4){
