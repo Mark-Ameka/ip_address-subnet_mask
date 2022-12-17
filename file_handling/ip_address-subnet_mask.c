@@ -54,6 +54,10 @@ int main(){
 	int size = sizeof(noh)/sizeof(int);
 	qsort(noh, size, sizeof(int), cmpfunc);
 	
+	//file handling
+	FILE *table_all;
+	FILE *table_excluded;
+	
 				  //4th Octet
 	Octet oc[] = {{2,          30, 4,   {255,255,255,252}},
 				  {6,          29, 8,   {255,255,255,248}},
@@ -123,9 +127,17 @@ int main(){
 	printf("%d", new_ip.o4);
 	printf("\n\n");
 	
+	table_all = fopen("table_all.txt", "a");
+	fprintf(table_all, "%s\t%s\t%s\t%s\t%s\t%s\t\t%s\t%s\t%s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "BRC ADDRESS", "SUBNET", "NOUHA", "NOWA", "WCM");
+	
+	table_excluded = fopen("table_excluded.txt", "a");
+	fprintf(table_excluded, "%s\t%s\t%s\t%s\t%s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "SUBNET");
+	
 	printf("%-7s| %-7s| %-5s | %-16s| %-16s| %-16s| %-8s| %-8s| %-8s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "BRC ADDRESS", "SUBNET", "NOUHA", "NOWA", "WCM");
 	printf("-------+--------+-------+-----------------+-----------------+-----------------+---------+---------+--------------\n");
 	for(i = 0; i < size; i++){
+		table_all = fopen("table_all.txt", "a");
+		table_excluded = fopen("table_excluded.txt", "a");
 		printf("%-7d: ", noh[i]);
 		//find first occurence
 		for(j = 0; j < bytes && (oc[j].num_of_host - noh[i]) < 0;  j++){}
@@ -196,6 +208,9 @@ int main(){
 			printf("%-8d| ", oc[j].num_of_host);
 			printf("%-8d|", oc[j].num_of_host - noh[i]);
 			printf("%2d.%-3d.%-3d.%-3d\n", 255 - oc[j].sub_mask.n1, 255 - oc[j].sub_mask.n2, 255 - oc[j].sub_mask.n3, 255 - oc[j].sub_mask.n4);
+			
+			fprintf(table_all, "%d\t%d\t%d\t%d.%d.%d.%d\t%d.%d.%d.%d\t%d.%d.%d.%d\t%d\t%d\t%d.%d.%d.%d\n", noh[i], oc[j].prefix, oc[j].delta, new_ip.o1, new_ip.o2, new_ip.o3, new_ip.o4, br_add.o1, br_add.o2, br_add.o3, br_add.o4, oc[j].sub_mask.n1, oc[j].sub_mask.n2, oc[j].sub_mask.n3, oc[j].sub_mask.n4, oc[j].num_of_host, oc[j].num_of_host - noh[i], (255 - oc[j].sub_mask.n1), (255 - oc[j].sub_mask.n2), (255 - oc[j].sub_mask.n3), (255 - oc[j].sub_mask.n4));
+			fprintf(table_excluded, "%d\t%d\t%d\t%d.%d.%d.%d\t%d.%d.%d.%d\n", noh[i], oc[j].prefix, oc[j].delta, new_ip.o1, new_ip.o2, new_ip.o3, new_ip.o4, oc[j].sub_mask.n1, oc[j].sub_mask.n2, oc[j].sub_mask.n3, oc[j].sub_mask.n4);
 		}
 	}
 		
