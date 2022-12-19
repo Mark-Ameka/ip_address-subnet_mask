@@ -127,10 +127,16 @@ int main(){
 	printf("%d", new_ip.o4);
 	printf("\n\n");
 	
-	table_all = fopen("table_all.txt", "a");
+	table_all = fopen("table_all.txt", "r+");
+	fseek(table_all, 0, SEEK_SET);
+	
+	table_all = fopen("table_all.txt", "w");
 	fprintf(table_all, "%s\t%s\t%s\t%s\t%s\t%s\t\t%s\t%s\t%s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "BRC ADDRESS", "SUBNET", "NOUHA", "NOWA", "WCM");
 	
-	table_excluded = fopen("table_excluded.txt", "a");
+	table_excluded = fopen("table_excluded.txt", "r+");
+	fseek(table_excluded, 0, SEEK_SET);
+	
+	table_excluded = fopen("table_excluded.txt", "w");
 	fprintf(table_excluded, "%s\t%s\t%s\t%s\t%s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "SUBNET");
 	
 	printf("%-7s| %-7s| %-5s | %-16s| %-16s| %-16s| %-8s| %-8s| %-8s\n", "GIVEN", "PREFIX", "DELTA", "IP ADDRESS", "BRC ADDRESS", "SUBNET", "NOUHA", "NOWA", "WCM");
@@ -213,6 +219,6 @@ int main(){
 			fprintf(table_excluded, "%d\t%d\t%d\t%d.%d.%d.%d\t%d.%d.%d.%d\n", noh[i], oc[j].prefix, oc[j].delta, new_ip.o1, new_ip.o2, new_ip.o3, new_ip.o4, oc[j].sub_mask.n1, oc[j].sub_mask.n2, oc[j].sub_mask.n3, oc[j].sub_mask.n4);
 		}
 	}
-		
+	
 	return 0;
 }
